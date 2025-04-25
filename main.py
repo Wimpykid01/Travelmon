@@ -22,10 +22,11 @@ if "init" not in st.session_state:
   st.session_state.Types = [["Dragon", "0.png", 0],["Ice", "1.png", 0],["Fire", "2.png", 0],["Water", "3.png", 0],["Grass", "4.png", 0],["Fairy", "5.png", 0],["Steel", "6.png", 0],["Rock", "7.png", 0],["Electric", "8.png", 0],["Pyschic", "9.png", 0],["Normal", "10.png", 0]]
   st.session_state.Preferences = []
   st.session_state.Page = -1
-  st.session_state.AIType = 0
+  st.session_state.prevType = 0
   st.session_state.prompt = ""
 
 #part of if statement when page is 1-11 but separated in attempt to fix bugs,, it didtn work :sob:
+"""
 @st.fragment
 
 #what this does is basically finds a specific thing from inside a nested list
@@ -43,6 +44,7 @@ def AI_fragment():
      #sets the location of the ai generated type within the Types list
       else:
         st.session_state.AIType = i
+        """
 
 #for possible css-ing in the future
 def load_CSS(file_path):
@@ -91,6 +93,8 @@ elif st.session_state.Page == 0:
       #increase page by 1
       st.session_state.Page = 1
 
+      st.session_state.prevType = Random_2
+
       #debug stuff
       print(st.session_state.Preferences)
       print(st.session_state.Types)
@@ -101,8 +105,59 @@ elif st.session_state.Page == 0:
 #now the same concept here basically as before but now, we take the second type from the previous page and we get ai to choose another type to compare with the previous one
 elif st.session_state.Page > 0 and st.session_state.Page < 11:
 
+  Random = random.randint(0,10)
 #to format the stuff in the preferences list to give to the ai as information for its choice
-  for i in range(len(st.session_state.Preferences)):
+  for i in range(len(st.session_state.Type)):
+    if 1 == st.session_state.Type[Random][2]:
+      st.rerun(scope="app")
+    else:
+
+ #then yknow go back to the top
+
+
+      with st.form(f"Page{st.session_state.Page}"):
+
+    
+
+        col1, col2, = st.columns(2, gap="small",vertical_alignment="center")
+
+    #finding the location of the previously used col2 type in the Types list, using the name of the type
+  
+
+    #setting the new ai chosen type to "is used" 1
+        
+
+
+        st.write(f"{st.session_state.Page+1}/11")
+
+    #debug stuff
+       
+
+    #displaying the images using the locations within Types we found earlier
+        col1.image(st.session_state.Types[st.session_state.PrevType][1])
+        col2.image(st.session_state.Types[Random][1])
+
+        Slider = st.slider("Which do you prefer?", 0, 100, 50)
+
+        if st.form_submit_button("Next"):
+
+      #same as before, logs the users preferences, increases page by 1 and restarts
+          st.session_state.prevType = Random
+          st.session_state.Types[Random][2] = 1
+          st.session_state.Preferences.append([st.session_state.Types[st.session_state.PrevType][0], st.session_state.Types[Random][0], Slider])
+          st.session_state.Page += 1
+          print(st.session_state.Preferences)
+          print(st.session_state.Types)
+          print(st.session_state.Page)
+          st.rerun(scope="app")
+
+      #i cant think of why this doesnt work i wanna commit sudoku please help :sob: i thought this through it should work but iasoid;hjfasdh f;aowueh
+      #it used to be a bit easier to follow but i uh tried stuff and that stuff didnt work and now i cant be bothered to make it go back to how it was so.
+      #type_list = ["balls", "gay"]
+      #final_thing = [""]
+      #when prompt is whenever...
+      """
+       for i in range(len(st.session_state.Preferences)):
     st.session_state.prompt += f"The preference between {st.session_state.Preferences[i][0]} and type {st.session_state.Preferences[i][1]} is {st.session_state.Preferences[i][2]}, "
 
   st.session_state.prompt += "The remaining types are: "
@@ -111,48 +166,4 @@ elif st.session_state.Page > 0 and st.session_state.Page < 11:
   for i in range(len(st.session_state.Types)):
     if st.session_state.Types[i][2] == 0:
       st.session_state.prompt += f" {st.session_state.Types[i][0]},"
- 
- #then yknow go back to the top
-  AI_fragment()
-
-  with st.form(f"Page{st.session_state.Page}"):
-
-    
-
-    col1, col2, = st.columns(2, gap="small",vertical_alignment="center")
-
-    #finding the location of the previously used col2 type in the Types list, using the name of the type
-    for i, sublist in enumerate(st.session_state.Types):
-      if st.session_state.Preferences[-1][1] in sublist:
-
-        #storing it for later use
-        PrevType = i
-
-    #setting the new ai chosen type to "is used" 1
-    st.session_state.Types[st.session_state.AIType][2] = 1
-
-
-    st.write(f"{st.session_state.Page+1}/11")
-
-    #debug stuff
-    print(PrevType)
-    print(st.session_state.AIType)
-
-    #displaying the images using the locations within Types we found earlier
-    col1.image(st.session_state.Types[PrevType][1])
-    col2.image(st.session_state.Types[st.session_state.AIType][1])
-
-    Slider = st.slider("Which do you prefer?", 0, 100, 50)
-
-    if st.form_submit_button("Next"):
-
-      #same as before, logs the users preferences, increases page by 1 and restarts
-      st.session_state.Preferences.append([st.session_state.Types[PrevType][0], st.session_state.Types[st.session_state.AIType][0], Slider])
-      st.session_state.Page += 1
-      print(st.session_state.Preferences)
-      print(st.session_state.Types)
-      print(st.session_state.Page)
-      st.rerun(scope="app")
-
-      #i cant think of why this doesnt work i wanna commit sudoku please help :sob: i thought this through it should work but iasoid;hjfasdh f;aowueh
-      #it used to be a bit easier to follow but i uh tried stuff and that stuff didnt work and now i cant be bothered to make it go back to how it was so.
+      """
