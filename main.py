@@ -43,7 +43,7 @@ load_CSS(CSS_path)
 if st.session_state.Page == 0:
   with st.container():
     st.write("Welcome to the Travelmon quiz, you will be shown different monsters, move the slider towards the monster you like the most, then hit Next. We will then give you a vacation country youd enjoy!")
-    if st.button("Start", key="start"):
+    if st.button("Start", key="start", use_container_width=True):
       st.session_state.Page = 1
       st.rerun(scope="app")
 
@@ -60,7 +60,7 @@ elif st.session_state.Page > 0 and st.session_state.Page < 11:
 
     Slider = st.slider("Which do you prefer?", 0, 100, 50)
 
-    if st.form_submit_button("Next"):
+    if st.form_submit_button("Next", use_container_width=True):
         st.session_state.Types[st.session_state.MonOrder[st.session_state.Page-1]][2] = 1
         st.session_state.Types[st.session_state.MonOrder[st.session_state.Page]][2] = 1
 
@@ -86,7 +86,7 @@ else:
     Datafarme = pd.DataFrame(data=Data)
     Datafarme.rename(columns={'Lat': 'latitude', 'Lon': 'longitude'}, inplace=True)
 
-    st.map(data=Datafarme)
+    st.map(data=Datafarme,zoom=4,size=5000,color="#4cc54c")
     print(st.session_state.LatLong)
 
     
